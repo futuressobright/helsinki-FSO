@@ -1,3 +1,10 @@
+// React uses C++ style comments
+
+/* C-style comments
+   also work!
+*/
+
+// Header takes care of rendering the name of the course
 const Header = (props) => {
 	console.log(props)
 	return (
@@ -8,20 +15,22 @@ const Header = (props) => {
 
 }
 
+// Content renders the parts and their number of exercises 
 const Content = (props) => {
 	console.log(props)
 	return (
 		<div>
-			<p>{props.part}</p>
+			<p>{props.part} {props.exercises}</p>
 		</div>
 	)
 }
 
+// Total renders the total number of exercises
 const Total = (props) => {
 	console.log(props)
 	return (
 		<div>
-			<p>{props.exercise}</p>
+			<p>{props.exercises}</p>
 		</div>
 	)
 }
@@ -41,12 +50,12 @@ const App = () => {
   return (
     <div>
 	<Header course={course} />
-	<Content part={part1} />
-	<Total exercise={exercises1} />
-	<Content part={part2} />
-	<Total exercise={exercises2} />
-	<Content part={part3} />
-	<Total exercise={exercises3} />
+
+	<Content part={part1} exercises={exercises1}/>
+	<Content part={part2} exercises={exercises2}/>
+	<Content part={part3} exercises={exercises3}/>
+
+	<Total exercises={exercises1+exercises2+exercises3} />
     </div>
   )
 }
