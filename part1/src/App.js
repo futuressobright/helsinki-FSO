@@ -1,4 +1,4 @@
-// 1.5 single JS object
+// 1.5 single javascript object
 const Header = (props) => {
 	return (
 		<div>
