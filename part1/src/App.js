@@ -1,4 +1,4 @@
-// 1.6 unicafe step1
+// 1.7 unicafe step2
 import { useState } from 'react'
 
 const App = () => {
@@ -40,6 +40,10 @@ const App = () => {
       <p>Good:  {good}</p>
       <p>Neutral: {neutral}</p>
       <p>Bad:  {bad}</p>
+      <p>All:  {good + neutral + bad}</p>
+      <p>Average:  {(good + (bad*-1)) / (good + neutral + bad)}</p>
+      <p>Positive:  {good / (good + neutral + bad)}</p>
+
     </div>
   )
 }
