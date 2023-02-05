@@ -2,18 +2,21 @@ import { useState } from 'react'
 
 const Statistics = (props) => {
   let feedback = props.good + props.neutral + props.bad
-
   if (feedback) {
     return (
       <div>
-        <StatisticLine text="Good" value={props.good}/>
-        <StatisticLine text="Neutral" value={props.neutral}/>
-        <StatisticLine text="Bad" value={props.bad}/>
-
-        <StatisticLine text="All" value={props.good + props.neutral + props.bad}/>
-        <StatisticLine text="Average" value={(props.good + (props.bad*-1)) / (props.good + props.neutral + props.bad)}/>
-        <StatisticLine text="Positive" value={props.good / (props.good + props.neutral + props.bad)}/>
-      </div>)
+        <table>
+          <tbody>
+            <tr><td>Good</td><td>{props.good}</td></tr>
+            <tr><td>Neutral</td><td>{props.neutral}</td></tr>
+            <tr><td>Bad</td><td>{props.bad}</td></tr>
+            <tr><td>All</td><td>{props.good + props.neutral + props.bad}</td></tr>
+            <tr><td>Average</td><td>{((props.good + (props.bad*-1)) / (props.good + props.neutral + props.bad)).toFixed(2)}</td></tr>
+            <tr><td>Positive</td><td>{(props.good / (props.good + props.neutral + props.bad)).toFixed(2)}</td></tr>
+          </tbody>
+        </table>
+      </div>
+      )
   } 
   else 
   {
@@ -32,6 +35,8 @@ const Button = (props) => {
     <button onClick={props.handleClick}>{props.text}</button>
   )
 }
+
+
 
 const App = () => {
   // save clicks of each button to its own state
