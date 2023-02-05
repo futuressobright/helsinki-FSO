@@ -1,5 +1,17 @@
-// 1.7 unicafe step2
 import { useState } from 'react'
+
+const Statistics = (props) => {
+  return (
+    <div>
+      <p>All:  {props.good + props.neutral + props.bad}</p>
+
+      <p>Average:  {(props.good + (props.bad*-1)) / (props.good + props.neutral + props.bad)}</p>
+
+      <p>Positive:  {props.good / (props.good + props.neutral + props.bad)}</p>
+
+    </div>
+  )
+}
 
 const App = () => {
   // save clicks of each button to its own state
@@ -40,9 +52,8 @@ const App = () => {
       <p>Good:  {good}</p>
       <p>Neutral: {neutral}</p>
       <p>Bad:  {bad}</p>
-      <p>All:  {good + neutral + bad}</p>
-      <p>Average:  {(good + (bad*-1)) / (good + neutral + bad)}</p>
-      <p>Positive:  {good / (good + neutral + bad)}</p>
+
+      <Statistics good={good} neutral={neutral} bad={bad} />
 
     </div>
   )
