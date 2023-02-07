@@ -1,11 +1,8 @@
 import { useState } from 'react'
 
+const Button = (props) => { return ( <button onClick={props.handleClick}>{props.text}</button> ) }
 
-const Button = (props) => {
-  return (
-    <button onClick={props.handleClick}>{props.text}</button>
-  )
-}
+const Text = (props) => { return ( <p>{props.text}</p> ) }
 
 const App = () => {
   const anecdotes = [
@@ -18,15 +15,30 @@ const App = () => {
     'Programming without an extremely heavy use of console.log is same as if a doctor would refuse to use x-rays or blood tests when diagnosing patients.',
     'The only way to go fast, is to go well.'
   ]
-   
+  
+  let length = anecdotes.length
+  const startingpoint = new Array(anecdotes.length).fill(0)
+
   const [selected, setSelected] = useState(0)
-  const handleAnecdote = () => { setSelected(Math.random() * anecdotes.length | 0)}
+  const [points, setPoints] = useState(startingpoint)
+
+  const handleAnecdote = () => { setSelected(Math.random() * anecdotes.length | 0) }
+
+  const handlePoints = () => { 
+    const copy = [...points]
+    copy[selected] += 1
+    setPoints(copy)
+  }  
 
   return (
     <div>
       <h1>Pearls of coding wisdom</h1>
-      <p>{anecdotes[selected]}</p>
-      <Button text={"next anecdote"} handleClick={handleAnecdote} />
+
+      <Text text={ anecdotes[selected] }/>
+      <Text text={ points[selected] + " votes" }/>
+
+      <Button text={ "upvote this" } handleClick={ handlePoints }/>
+      <Button text={ "next anecdote" } handleClick={ handleAnecdote } />
     </div>
   )
 }
