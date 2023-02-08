@@ -4,6 +4,11 @@ const Button = (props) => { return ( <button onClick={props.handleClick}>{props.
 
 const Text = (props) => { return ( <p>{props.text}</p> ) }
 
+const Header = (props) => { return ( <h1>{props.text}</h1> ) }
+
+let maxval = 0
+let maxselect = 0
+
 const App = () => {
   const anecdotes = [
     'If it hurts, do it more often.',
@@ -16,7 +21,6 @@ const App = () => {
     'The only way to go fast, is to go well.'
   ]
   
-  let length = anecdotes.length
   const startingpoint = new Array(anecdotes.length).fill(0)
 
   const [selected, setSelected] = useState(0)
@@ -27,18 +31,26 @@ const App = () => {
   const handlePoints = () => { 
     const copy = [...points]
     copy[selected] += 1
+
+    if (copy[selected] > maxval) {
+      maxval = copy[selected]
+      maxselect = selected
+    }
+
     setPoints(copy)
   }  
 
   return (
     <div>
-      <h1>Pearls of coding wisdom</h1>
-
+      <Header text={"Anecdote of the day"}/>
       <Text text={ anecdotes[selected] }/>
       <Text text={ points[selected] + " votes" }/>
 
       <Button text={ "upvote this" } handleClick={ handlePoints }/>
       <Button text={ "next anecdote" } handleClick={ handleAnecdote } />
+
+      <Header text={"Anecdote with the most votes"}/>
+      <Text text={ anecdotes[maxselect] }/>
     </div>
   )
 }
