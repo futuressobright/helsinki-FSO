@@ -1,21 +1,4 @@
-const Course = (props) => {
-
-  var names = props.course.parts.map(x => {
-    return <li key = {x.id}>
-      {x.name + " " + x.exercises}</li>
-  })
-  console.log(names)
-
-  return (
-    <div>
-      <h1>{props.course.name}</h1>
-      <ul>
-        <p>{names}</p>
-      </ul>
-    </div>
-  )
-}
-
+import Course from './components/Course'
 
 const App = () => {
   const course = {
@@ -33,8 +16,8 @@ const App = () => {
         id: 2
       },
       {
-        name: 'Lasse Viren',
-        exercises: 9,
+        name: 'Magic functions',
+        exercises: 3,
         id: 4
       },
       {
