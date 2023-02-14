@@ -1,23 +1,39 @@
-const Course = (props) => {
+const Header = (props) => <h1>{props.certificate.name}</h1>;
 
-return (
-  <div>
-    <h2>{props.course.name}</h2>
-    {props.course.parts.map(x => 
-          <Chapter key={x.id} course={x} />
-    )}
-  </div>
-  )}
+const Part = (props) => (
+  <p>
+    {props.part.name} {props.part.exercises}
+  </p>
+);
 
-
-
-const Chapter = (props) => {
-  console.log(props)
-
+const Content = ({ chapters }) => {
   return (
     <div>
-      <p>{props.course.name} {props.course.exercises}</p>
+      {chapters.map((chapter) => (
+        <Part key={chapter.id} part={chapter} />
+      ))}
     </div>
-  )};
+  );
+};
 
-export default Course
+const Total = ({ parts }) => {
+  return (
+    <div>
+      <p>
+        <strong>
+          Total exercises: {parts.reduce((s, p) => s + p.exercises, 0)}
+        </strong>
+      </p>
+    </div>
+  );
+};
+
+const Course = ({ course }) => (
+  <>
+    <Header certificate={course.name} />
+    <Content chapters={course.parts} />
+    <Total parts={course.parts} />
+  </>
+);
+
+export default Course;
