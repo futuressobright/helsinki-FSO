@@ -30,7 +30,7 @@ const App = () => {
 
   const personsToShow = showAll
     ? persons
-    : persons.filter((x) => x.name.includes(newFilter));
+    : persons.filter((y) => y.name.includes(newFilter));
 
   const addPerson = (event) => {
     event.preventDefault();
