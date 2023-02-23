@@ -35,14 +35,17 @@ const App = () => {
     ? persons
     : persons.filter((z) => z.name.toLowerCase().includes(newFilter));
 
+  // TBD 2.12
   const addPerson = (event) => {
     event.preventDefault();
+
     const personObject = {
       name: newPerson,
       number: newNumber,
       important: Math.random() < 0.5,
-      id: persons.length + 1,
+      // id: persons.length + 1,
     };
+
     for (let i = 0; i < persons.length; i++) {
       if (personObject.name.length === 0) {
         alert("attempting to add empty name. no ghosts allowed!");
@@ -53,10 +56,16 @@ const App = () => {
         break;
       } else {
         if (i === persons.length - 1) {
-          setPersons(persons.concat(personObject));
+          // setPersons(persons.concat(personObject));
+          axios
+            .post("http://localhost:3001/persons", personObject)
+            .then((response) => {
+              console.log(response);
+            });
         }
       }
     }
+
     setNewPerson("");
     setNewNumber("");
   };
