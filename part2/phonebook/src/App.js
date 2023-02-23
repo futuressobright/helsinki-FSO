@@ -1,27 +1,30 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
 import Person from "./components/Person";
 
 const App = () => {
+  // well, it's right here - change this!
+  /*
   const [persons, setPersons] = useState([
-    { name: "Arto Hellas", number: "040-123456", important: true, id: 1 },
+    { name: "Artu Hellas", number: "040-123456", important: true, id: 1 },
     { name: "Ada Lovelace", number: "39-44-5323523", important: true, id: 2 },
     { name: "Dan Abramov", number: "12-43-234345", important: false, id: 3 },
     { name: "Masha Smith", number: "39-23-6423122", important: false, id: 4 },
-    {
-      name: "Mary Pop",
-      number: "39-23-6122",
-      important: true,
-      id: 5,
-    },
-    { name: "Gasho ", number: "22", important: false, id: 6 },
-    { name: "Gregg Hjorth", number: "3122", important: true, id: 7 },
-    {
-      name: "Avinash Schmidt",
-      number: "322",
-      important: false,
-      id: 8,
-    },
   ]);
+  */
+
+  const [persons, setPersons] = useState([]);
+
+  const hook = () => {
+    console.log("effect");
+    axios.get("http://localhost:3001/persons").then((response) => {
+      console.log("promise fulfilled");
+      setPersons(response.data);
+    });
+  };
+
+  useEffect(hook, []);
+
   const [newPerson, setNewPerson] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [newFilter, setNewFilter] = useState("");
@@ -30,7 +33,7 @@ const App = () => {
 
   const personsToShow = showAll
     ? persons
-    : persons.filter((z) => z.name.includes(newFilter));
+    : persons.filter((z) => z.name.toLowerCase().includes(newFilter));
 
   const addPerson = (event) => {
     event.preventDefault();
