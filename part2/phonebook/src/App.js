@@ -1,20 +1,18 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import Person from "./components/Person";
+import personService from "./services/persons";
 
 const App = () => {
-  // well, it's right here - change this!
-  /*
-  const [persons, setPersons] = useState([
-    { name: "Artu Hellas", number: "040-123456", important: true, id: 1 },
-    { name: "Ada Lovelace", number: "39-44-5323523", important: true, id: 2 },
-    { name: "Dan Abramov", number: "12-43-234345", important: false, id: 3 },
-    { name: "Masha Smith", number: "39-23-6423122", important: false, id: 4 },
-  ]);
-  */
-
   const [persons, setPersons] = useState([]);
+  const [newPerson, setNewPerson] = useState("");
+  const [newNumber, setNewNumber] = useState("");
+  const [newFilter, setNewFilter] = useState("");
 
+  const [showAll, setShowAll] = useState(false);
+
+  // 2.13
+  /*
   const hook = () => {
     console.log("effect");
     axios.get("http://localhost:3001/persons").then((response) => {
@@ -22,20 +20,21 @@ const App = () => {
       setPersons(response.data);
     });
   };
-
   useEffect(hook, []);
+  */
 
-  const [newPerson, setNewPerson] = useState("");
-  const [newNumber, setNewNumber] = useState("");
-  const [newFilter, setNewFilter] = useState("");
-
-  const [showAll, setShowAll] = useState(false);
+  useEffect(() => {
+    personService // _
+      .getAll()
+      .then((initialNotes) => {
+        setPersons(initialNotes);
+      });
+  }, []);
 
   const personsToShow = showAll
     ? persons
     : persons.filter((z) => z.name.toLowerCase().includes(newFilter));
 
-  // TBD 2.12
   const addPerson = (event) => {
     event.preventDefault();
 
@@ -56,11 +55,11 @@ const App = () => {
         break;
       } else {
         if (i === persons.length - 1) {
-          // setPersons(persons.concat(personObject));
-          axios
-            .post("http://localhost:3001/persons", personObject)
-            .then((response) => {
-              console.log(response);
+          personService //
+            .create(personObject)
+            .then((returnedNote) => {
+              setPersons(persons.concat(returnedNote));
+              setNewPerson("");
             });
         }
       }
