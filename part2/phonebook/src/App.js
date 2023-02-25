@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
 import Person from "./components/Person";
-import personService from "./services/persons";
+import personService from "./services/persons"; // TBD see this!
 
 const App = () => {
   const [persons, setPersons] = useState([]);
@@ -10,18 +9,6 @@ const App = () => {
   const [newFilter, setNewFilter] = useState("");
 
   const [showAll, setShowAll] = useState(false);
-
-  // 2.13
-  /*
-  const hook = () => {
-    console.log("effect");
-    axios.get("http://localhost:3001/persons").then((response) => {
-      console.log("promise fulfilled");
-      setPersons(response.data);
-    });
-  };
-  useEffect(hook, []);
-  */
 
   useEffect(() => {
     personService // _
@@ -35,7 +22,7 @@ const App = () => {
     ? persons
     : persons.filter((z) => z.name.toLowerCase().includes(newFilter));
 
-  const addPerson = (event) => {
+  const handleAddPerson = (event) => {
     event.preventDefault();
 
     const personObject = {
@@ -69,15 +56,25 @@ const App = () => {
     setNewNumber("");
   };
 
-  const handlePersonChange = (event) => {
+  const handleDeletePerson = (id, name) => {
+    if (window.confirm(`Shall I delete ${name}?`)) {
+      personService
+        .deleter(id) //
+        .then(() => {
+          setPersons(persons.filter((n) => n.id !== id));
+        });
+    }
+  };
+
+  const handleChangePerson = (event) => {
     setNewPerson(event.target.value);
   };
 
-  const handleNumberChange = (event) => {
+  const handleChangeNumber = (event) => {
     setNewNumber(event.target.value);
   };
 
-  const handleFilterChange = (event) => {
+  const handleChangeFilter = (event) => {
     setNewFilter(event.target.value);
   };
 
@@ -86,19 +83,19 @@ const App = () => {
       <h2>Phonebook</h2>
       <div>
         <div>
-          Filter: <input value={newFilter} onChange={handleFilterChange} />
+          Filter: <input value={newFilter} onChange={handleChangeFilter} />
           <button onClick={() => setShowAll(!showAll)}>
             {showAll ? "filter on" : "show all"}
           </button>
         </div>
       </div>
       <h2>Add a new victim ...</h2>
-      <form onSubmit={addPerson}>
+      <form onSubmit={handleAddPerson}>
         <div>
-          name: <input value={newPerson} onChange={handlePersonChange} />
+          name: <input value={newPerson} onChange={handleChangePerson} />
         </div>
         <div>
-          number: <input value={newNumber} onChange={handleNumberChange} />
+          number: <input value={newNumber} onChange={handleChangeNumber} />
         </div>
 
         <div>
@@ -108,7 +105,11 @@ const App = () => {
       <h2>Numbers</h2>
       <ul>
         {personsToShow.map((x) => (
-          <Person key={x.id} person={x} />
+          <Person
+            key={x.id}
+            person={x}
+            handleDeletePerson={handleDeletePerson}
+          />
         ))}
       </ul>
       ...
