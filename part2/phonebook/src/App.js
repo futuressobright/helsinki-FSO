@@ -7,7 +7,6 @@ const App = () => {
   const [newPerson, setNewPerson] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [newFilter, setNewFilter] = useState("");
-
   const [showAll, setShowAll] = useState(false);
 
   useEffect(() => {
@@ -32,21 +31,34 @@ const App = () => {
       // id: persons.length + 1,
     };
 
+    if (personObject.name.length === 0) {
+      alert("attempting to add empty name. no ghosts allowed!");
+      setNewPerson("");
+      setNewNumber("");
+      return;
+    }
+
     for (let i = 0; i < persons.length; i++) {
-      if (personObject.name.length === 0) {
-        alert("attempting to add empty name. no ghosts allowed!");
-        break;
-      }
       if (persons[i].name === personObject.name) {
-        alert(`${persons[i].name} is already in phonebook`);
-        break;
+        if (
+          window.confirm(
+            `${persons[i].name} is already in the phonebook. 
+              Would you like to update the number?`
+          )
+        ) {
+          /// TBD 2.15
+          personService
+            .update(persons[i].id, personObject) //
+            .then((returnedNote) => {
+              setPersons(persons.concat(returnedNote));
+            });
+        }
       } else {
         if (i === persons.length - 1) {
           personService //
             .create(personObject)
             .then((returnedNote) => {
               setPersons(persons.concat(returnedNote));
-              setNewPerson("");
             });
         }
       }
