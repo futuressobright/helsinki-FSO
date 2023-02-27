@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import Person from "./components/Person";
-import personService from "./services/persons"; // TBD see this!
+import Notification from "./components/Notification";
+import personService from "./services/persons";
 
 const App = () => {
   const [persons, setPersons] = useState([]);
@@ -8,6 +9,7 @@ const App = () => {
   const [newNumber, setNewNumber] = useState("");
   const [newFilter, setNewFilter] = useState("");
   const [showAll, setShowAll] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("something happened!");
 
   useEffect(() => {
     personService // _
@@ -28,7 +30,6 @@ const App = () => {
       name: newPerson,
       number: newNumber,
       important: Math.random() < 0.5,
-      // id: persons.length + 1,
     };
 
     if (personObject.name.length === 0) {
@@ -46,11 +47,23 @@ const App = () => {
               Would you like to update the number?`
           )
         ) {
-          /// TBD 2.15
           personService
-            .update(persons[i].id, personObject) //
+            .update(persons[i].id, personObject)
             .then((returnedNote) => {
-              setPersons(persons.concat(returnedNote));
+              setPersons(
+                persons
+                  .filter((n) => n.id !== persons[i].id)
+                  .concat(returnedNote)
+              );
+            })
+            .then(setErrorMessage(`${persons[i].name}'s number was changed`))
+            .catch((error) => {
+              setErrorMessage(
+                `'${personObject.name} ' was already removed from server`
+              );
+              setTimeout(() => {
+                setErrorMessage(null);
+              }, 5000);
             });
         }
       } else {
@@ -60,6 +73,10 @@ const App = () => {
             .then((returnedNote) => {
               setPersons(persons.concat(returnedNote));
             });
+          setErrorMessage(`${personObject.name} was added to our little book!`);
+          setTimeout(() => {
+            setErrorMessage(null);
+          }, 5000);
         }
       }
     }
@@ -75,6 +92,10 @@ const App = () => {
         .then(() => {
           setPersons(persons.filter((n) => n.id !== id));
         });
+      setErrorMessage(`${name} removed from server`);
+      setTimeout(() => {
+        setErrorMessage(null);
+      }, 5000);
     }
   };
 
@@ -93,6 +114,9 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <div>
+        <Notification message={errorMessage} />
+      </div>
       <div>
         <div>
           Filter: <input value={newFilter} onChange={handleChangeFilter} />
